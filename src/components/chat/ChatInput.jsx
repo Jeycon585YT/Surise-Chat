@@ -1,4 +1,4 @@
-import Button from "./shared/Button";
+import Button from "../shared/Button";
 import { IoIosAttach } from "react-icons/io";
 import { LuImagePlus } from "react-icons/lu";
 

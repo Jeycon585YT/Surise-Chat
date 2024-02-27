@@ -1,4 +1,4 @@
-const Chats = () => {
+const ChatList = () => {
   return (
     <div>
       <div className="flex p-2 items-center gap-2 text-white hover:bg-black/40 cursor-pointer">
@@ -52,4 +52,4 @@ const Chats = () => {
   );
 };
 
-export default Chats;
+export default ChatList;
