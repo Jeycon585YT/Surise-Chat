@@ -1,6 +1,8 @@
 import { FaUserPlus } from "react-icons/fa6";
 import { BsThreeDots } from "react-icons/bs";
 import { BsCameraVideoFill } from "react-icons/bs";
+import Messages from "./Messages";
+import ChatInput from "./ChatInput";
 
 const Chat = () => {
   return (
@@ -15,6 +17,8 @@ const Chat = () => {
           <BsThreeDots className="cursor-pointer hover:text-sky-200 duration-150" />
         </div>
       </div>
+      <Messages />
+      <ChatInput />
     </div>
   );
 };
