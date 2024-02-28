@@ -3,6 +3,7 @@ import Input from "../components/shared/Input";
 import Button from "../components/shared/Button";
 import {
   registerUserToFirebase,
+  setUserToFirebase,
   updateProfileImageToFirebase,
   updateUserProfileToFirebase,
 } from "../Firebase/actions";
@@ -21,6 +22,12 @@ const Register = () => {
       const photoURL = await updateProfileImageToFirebase(file, user.uid);
       await updateUserProfileToFirebase({
         displayName,
+        photoURL,
+      });
+      await setUserToFirebase(user.uid, {
+        uid: user.uid,
+        displayName,
+        email,
         photoURL,
       });
     } catch (error) {
