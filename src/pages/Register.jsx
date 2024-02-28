@@ -8,10 +8,18 @@ import {
   updateUserProfileToFirebase,
 } from "../Firebase/actions";
 import { handleFirebaseError } from "../Firebase/errorHandle";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import LoadingSpin from "../components/shared/LoadingSpin";
 
 const Register = () => {
+  const [isPending, setIsPending] = useState(false);
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsPending(true);
+
     const displayName = e.target[0].value;
     const email = e.target[1].value;
     const password = e.target[2].value;
@@ -19,6 +27,9 @@ const Register = () => {
 
     try {
       const user = await registerUserToFirebase(email, password);
+
+      if (!user) return;
+
       const photoURL = await updateProfileImageToFirebase(file, user.uid);
       await updateUserProfileToFirebase({
         displayName,
@@ -30,13 +41,17 @@ const Register = () => {
         email,
         photoURL,
       });
+
+      navigate("/");
+      setIsPending(false);
     } catch (error) {
       handleFirebaseError(error);
     }
   };
 
   return (
-    <div className="bg-sky-200 min-h-screen flex items-center justify-center">
+    <div className="relative bg-sky-200 min-h-screen flex items-center justify-center">
+      {isPending && <LoadingSpin className="absolute" />}
       <div className="bg-white py-5 px-16 rounded-lg flex flex-col gap-4 items-center">
         <h1 className="text-neutral-600 font-bold text-4xl">Logo</h1>
         <h4 className="text-neutral-600 text-lg">Register</h4>
@@ -53,9 +68,18 @@ const Register = () => {
             <LuImagePlus size={48} />
             <span>Update image</span>
           </label>
-          <Button className="bg-sky-600/80" text="Sign Up" />
+          <Button
+            className="bg-sky-600/80 disabled:bg-slate-300"
+            text="Sign Up"
+            disabled={isPending}
+          />
         </form>
-        <p className="mt-2 text-neutral-600">You do have an account? Login</p>
+        <p className="mt-2 text-neutral-600">
+          You do have an account?{" "}
+          <Link className="text-sky-300 hover:text-sky-800 duration-150">
+            Login
+          </Link>{" "}
+        </p>
       </div>
     </div>
   );
