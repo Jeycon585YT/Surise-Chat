@@ -30,6 +30,7 @@ export const registerUserToFirebase = async (email, password) => {
 };
 
 export const updateProfileImageToFirebase = async (file, uid) => {
+  if (!file) return null;
   try {
     const storageRef = ref(storage, "images/" + uid);
 
@@ -56,6 +57,7 @@ export const updateUserProfileToFirebase = async (data) => {
 export const setUserToFirebase = async (uid, data) => {
   try {
     await setDoc(doc(db, "users", uid), data);
+    setUserToRedux(data);
   } catch (error) {
     handleFirebaseError(error);
   }
