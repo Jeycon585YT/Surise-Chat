@@ -1,9 +1,14 @@
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  updateProfile,
+} from "firebase/auth";
 import { auth, db, storage } from "./config";
 import { handleFirebaseError } from "./errorHandle";
 import toast from "react-hot-toast";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
+import { setUserToRedux } from "../redux/auth/utils";
 
 export const registerUserToFirebase = async (email, password) => {
   try {
@@ -35,9 +40,10 @@ export const updateProfileImageToFirebase = async (file, uid) => {
   }
 };
 
-export const updateUserProfileToFirebase = async (...data) => {
+export const updateUserProfileToFirebase = async (data) => {
   try {
     await updateProfile(auth.currentUser, data);
+
     return true;
   } catch (error) {
     handleFirebaseError(error);
@@ -52,3 +58,10 @@ export const setUserToFirebase = async (uid, data) => {
     handleFirebaseError(error);
   }
 };
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const { uid, displayName, email, photoURL } = user;
+    setUserToRedux({ uid, displayName, email, photoURL });
+  }
+});
