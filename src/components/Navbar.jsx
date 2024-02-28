@@ -1,7 +1,11 @@
 import { logOutFromFirebase } from "../Firebase/actions";
+import { useSelector } from "react-redux";
+import photo from "../assets/images/defaultPhoto.jpg";
 import Button from "./shared/Button";
 
 const Navbar = () => {
+  const { user } = useSelector((state) => state.auth);
+
   const handleLogoutClick = () => {
     logOutFromFirebase();
   };
@@ -12,10 +16,10 @@ const Navbar = () => {
       <div className="flex items-center gap-2">
         <img
           className="bg-slate-50 h-6 w-6 rounded-full object-cover"
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Muhammad_Ali_NYWTS.jpg/1200px-Muhammad_Ali_NYWTS.jpg"
+          src={user?.photoURL || photo}
           alt="profile image"
         />
-        <span className="">Muhammed Ali</span>
+        <span className="">{user?.displayName}</span>
         <Button
           className="bg-amber-950 text-sm font-medium"
           text="Logout"
