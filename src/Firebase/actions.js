@@ -1,8 +1,9 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth, storage } from "./config";
+import { auth, db, storage } from "./config";
 import { handleFirebaseError } from "./errorHandle";
 import toast from "react-hot-toast";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { doc, setDoc } from "firebase/firestore";
 
 export const registerUserToFirebase = async (email, password) => {
   try {
@@ -41,5 +42,13 @@ export const updateUserProfileToFirebase = async (...data) => {
   } catch (error) {
     handleFirebaseError(error);
     return false;
+  }
+};
+
+export const setUserToFirebase = async (uid, data) => {
+  try {
+    await setDoc(doc(db, "users", uid), data);
+  } catch (error) {
+    handleFirebaseError(error);
   }
 };
