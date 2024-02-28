@@ -1,5 +1,5 @@
 import Navbar from "../components/Navbar";
-import Search from "../components/Search";
+import Search from "../components/Search/Search";
 import ChatList from "./chat/ChatList";
 
 const SideBar = () => {

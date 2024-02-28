@@ -1,6 +1,4 @@
-import { CiSearch } from "react-icons/ci";
 import { FaSearch } from "react-icons/fa";
-import ChatListItem from "./chat/ChatListItem";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { SearchUserItem } from "./SearchUserItem";
