@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
   signOut,
   updateProfile,
 } from "firebase/auth";
@@ -70,6 +71,16 @@ onAuthStateChanged(auth, (user) => {
 
   setIsLoadingToRedux(false);
 });
+
+export const loginToFirebase = async (email, password) => {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    return true;
+  } catch (error) {
+    handleFirebaseError(error);
+    return false;
+  }
+};
 
 export const logOutFromFirebase = async () => {
   try {
