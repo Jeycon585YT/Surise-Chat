@@ -1,6 +1,11 @@
+import { logOutFromFirebase } from "../Firebase/actions";
 import Button from "./shared/Button";
 
 const Navbar = () => {
+  const handleLogoutClick = () => {
+    logOutFromFirebase();
+  };
+
   return (
     <div className="flex items-center bg-black/40 rounded-lg rounded-r-none h-20 p-2 justify-between text-slate-50">
       <span className="font-black text-xl">Logo</span>
@@ -11,7 +16,11 @@ const Navbar = () => {
           alt="profile image"
         />
         <span className="">Muhammed Ali</span>
-        <Button className="bg-amber-950 text-sm font-medium" text="Logout" />
+        <Button
+          className="bg-amber-950 text-sm font-medium"
+          text="Logout"
+          onClick={handleLogoutClick}
+        />
       </div>
     </div>
   );
