@@ -57,6 +57,7 @@ export const updateUserProfileToFirebase = async (data) => {
 export const setUserToFirebase = async (uid, data) => {
   try {
     await setDoc(doc(db, "users", uid), data);
+    await setDoc(doc(db, "userChats", uid), {});
     setUserToRedux(data);
   } catch (error) {
     handleFirebaseError(error);
