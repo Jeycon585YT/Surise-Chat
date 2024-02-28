@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  signOut,
   updateProfile,
 } from "firebase/auth";
 import { auth, db, storage } from "./config";
@@ -8,7 +9,7 @@ import { handleFirebaseError } from "./errorHandle";
 import toast from "react-hot-toast";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
-import { setUserToRedux } from "../redux/auth/utils";
+import { setIsLoadingToRedux, setUserToRedux } from "../redux/auth/utils";
 
 export const registerUserToFirebase = async (email, password) => {
   try {
@@ -60,8 +61,22 @@ export const setUserToFirebase = async (uid, data) => {
 };
 
 onAuthStateChanged(auth, (user) => {
-  if (user) {
+  if (!user) {
+    setUserToRedux(undefined);
+  } else {
     const { uid, displayName, email, photoURL } = user;
     setUserToRedux({ uid, displayName, email, photoURL });
   }
+
+  setIsLoadingToRedux(false);
 });
+
+export const logOutFromFirebase = async () => {
+  try {
+    await signOut(auth);
+    return true;
+  } catch (error) {
+    handleFirebaseError(error);
+    return false;
+  }
+};
