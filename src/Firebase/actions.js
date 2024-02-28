@@ -9,8 +9,9 @@ import { auth, db, storage } from "./config";
 import { handleFirebaseError } from "./errorHandle";
 import toast from "react-hot-toast";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { doc, setDoc } from "firebase/firestore";
+import { collection, doc, onSnapshot, query, setDoc } from "firebase/firestore";
 import { setIsLoadingToRedux, setUserToRedux } from "../redux/auth/utils";
+import { setUsersToRedux } from "../redux/users/utils";
 
 export const registerUserToFirebase = async (email, password) => {
   try {
@@ -94,3 +95,13 @@ export const logOutFromFirebase = async () => {
     return false;
   }
 };
+
+const q = query(collection(db, "users"));
+
+onSnapshot(q, (querySnapshot) => {
+  const usersArr = querySnapshot.docs.map((doc) => ({
+    ...doc.data(),
+  }));
+  console.log(usersArr);
+  setUsersToRedux(usersArr);
+});
