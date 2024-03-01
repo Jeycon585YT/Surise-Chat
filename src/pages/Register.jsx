@@ -50,15 +50,15 @@ const Register = () => {
   };
 
   return (
-    <div className="relative bg-sky-200 min-h-screen flex items-center justify-center">
+    <div className="relative bg-gradient-to-br from-blue-400 to-sky-300 min-h-screen flex items-center justify-center">
       {isPending && <LoadingSpin className="absolute" />}
-      <div className="bg-white py-5 px-16 rounded-lg flex flex-col gap-4 items-center">
-        <h1 className="text-neutral-600 font-bold text-4xl">Logo</h1>
-        <h4 className="text-neutral-600 text-lg">Register</h4>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <Input placeholder="display name" type="text" />
-          <Input placeholder="email" type="email" />
-          <Input placeholder="password" type="password" />
+      <div className="bg-white py-8 px-12 rounded-lg flex flex-col gap-6 items-center shadow-lg">
+        <h1 className="text-neutral-800 font-bold text-4xl">Logo</h1>
+        <h4 className="text-neutral-700 text-lg">Register</h4>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
+          <Input placeholder="Enter your display name" type="text" />
+          <Input placeholder="Email" type="email" />
+          <Input placeholder="Password" type="password" />
 
           <input id="file" className="hidden" type="file" />
           <label
@@ -66,19 +66,20 @@ const Register = () => {
             className="flex items-center space-x-4 cursor-pointer p-4 text-sky-600/60 hover:brightness-150 duration-150"
           >
             <LuImagePlus size={48} />
-            <span>Update image</span>
+            <span>Update Profile Image</span>
           </label>
+
           <Button
             className="bg-sky-600/80 disabled:bg-slate-300"
             text="Sign Up"
             disabled={isPending}
           />
         </form>
-        <p className="mt-2 text-neutral-600">
-          You do have an account?{" "}
+        <p className="mt-4 text-neutral-700">
+          Already have an account?{" "}
           <Link
             to="/login"
-            className="text-sky-300 hover:text-sky-800 duration-150"
+            className="text-sky-500 hover:text-sky-800 duration-150"
           >
             Login
           </Link>
