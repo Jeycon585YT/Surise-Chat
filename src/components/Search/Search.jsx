@@ -1,7 +1,7 @@
 import { FaSearch } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { SearchUserItem } from "./SearchUserItem";
+import SearchUserItem from "./SearchUserItem";
 
 const Search = () => {
   const [search, setSearch] = useState("");
