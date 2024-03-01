@@ -9,9 +9,19 @@ import { auth, db, storage } from "./config";
 import { handleFirebaseError } from "./errorHandle";
 import toast from "react-hot-toast";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { collection, doc, onSnapshot, query, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  onSnapshot,
+  query,
+  setDoc,
+} from "firebase/firestore";
 import { setIsLoadingToRedux, setUserToRedux } from "../redux/auth/utils";
 import { setUsersToRedux } from "../redux/users/utils";
+import { store } from "../redux/store";
+import { setChatRoms } from "../redux/chat/chatSlice";
 
 export const registerUserToFirebase = async (email, password) => {
   try {
@@ -20,9 +30,7 @@ export const registerUserToFirebase = async (email, password) => {
       email,
       password
     );
-
     toast.success("You have successfully registered!");
-
     return userCredential?.user;
   } catch (error) {
     handleFirebaseError(error);
@@ -30,11 +38,10 @@ export const registerUserToFirebase = async (email, password) => {
   }
 };
 
-export const updateProfileImageToFirebase = async (file, uid) => {
+export const updateProfileImageToFirebase = async (file) => {
   if (!file) return null;
   try {
-    const storageRef = ref(storage, "images/" + uid);
-
+    const storageRef = ref(storage, "images/" + Date.now().toString());
     const snapshot = await uploadBytes(storageRef, file);
     const photoURL = await getDownloadURL(snapshot.ref);
     return photoURL;
@@ -47,7 +54,6 @@ export const updateProfileImageToFirebase = async (file, uid) => {
 export const updateUserProfileToFirebase = async (data) => {
   try {
     await updateProfile(auth.currentUser, data);
-
     return true;
   } catch (error) {
     handleFirebaseError(error);
@@ -65,7 +71,7 @@ export const setUserToFirebase = async (uid, data) => {
   }
 };
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (!user) {
     setUserToRedux(undefined);
   } else {
@@ -96,12 +102,52 @@ export const logOutFromFirebase = async () => {
   }
 };
 
-const q = query(collection(db, "users"));
-
-onSnapshot(q, (querySnapshot) => {
+const usersQuery = query(collection(db, "users"));
+onSnapshot(usersQuery, (querySnapshot) => {
   const usersArr = querySnapshot.docs.map((doc) => ({
     ...doc.data(),
   }));
-  console.log(usersArr);
   setUsersToRedux(usersArr);
+});
+
+export const createChatRom = async (chatRomId, id1, id2) => {
+  try {
+    await setDoc(doc(db, "chatsRoms", chatRomId), {
+      chatRomId,
+      chatRomOwners: [id1, id2],
+      chatList: [],
+    });
+  } catch (error) {
+    handleFirebaseError(error);
+  }
+};
+
+export const createChatRomIdToUserChats = async (uid, chatRomId) => {
+  try {
+    await addDoc(collection(db, "usersChats", uid, "chatRomIds"), {
+      chatRomId,
+      owners: [],
+    });
+  } catch (error) {
+    handleFirebaseError(error);
+  }
+};
+
+export const getUserChatRoms = async (uid) => {
+  try {
+    const chatRomDocs = await getDocs(
+      collection(db, "usersChats", uid, "chatRomIds")
+    );
+    return chatRomDocs;
+  } catch (error) {
+    handleFirebaseError(error);
+  }
+};
+
+onSnapshot(collection(db, "chatsRoms"), (snapshot) => {
+  const chatsRoms = {};
+  snapshot.forEach((doc) => {
+    chatsRoms[doc.id] = doc.data();
+  });
+  store.dispatch(setChatRoms(chatsRoms));
 });
