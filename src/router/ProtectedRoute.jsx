@@ -13,7 +13,7 @@ const ProtectedRoute = () => {
     }
   }, [isLoading, navigate, user]);
 
-  return isLoading ? (
+  return isLoading && !user ? (
     <LoadingSpin className="flex justify-center items-center h-screen " />
   ) : (
     <Outlet />
