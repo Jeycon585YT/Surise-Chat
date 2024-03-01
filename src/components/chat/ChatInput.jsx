@@ -7,16 +7,19 @@ import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../Firebase/config";
 import { updateProfileImageToFirebase } from "../../Firebase/actions";
 import { FaFileImage } from "react-icons/fa";
+import { AiOutlineLoading } from "react-icons/ai";
 
 const ChatInput = ({ scrollRef }) => {
+  const [isPending, setIsPending] = useState(false);
   const [input, setInput] = useState("");
   const [imgFile, setImageFile] = useState(null);
   const { currentChatId } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.auth);
 
   const handleSubmit = async (event) => {
+    setIsPending(true);
     event.preventDefault();
-    if (!input) return;
+    if (!input && !imgFile) return;
     setInput("");
 
     try {
@@ -35,6 +38,7 @@ const ChatInput = ({ scrollRef }) => {
 
       setImageFile(null);
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
+      setIsPending(false);
     } catch (error) {
       console.error(error);
     }
@@ -54,6 +58,9 @@ const ChatInput = ({ scrollRef }) => {
             className="absolute -top-4 right-4 text-slate-400"
             size={28}
           />
+        )}
+        {isPending && (
+          <AiOutlineLoading className="absolute text-gray-800 right-2 top-5 animate-spin h-6 w-6" />
         )}
       </form>
 
