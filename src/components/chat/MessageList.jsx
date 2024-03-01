@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import Message from "./Message";
 import { useSelector } from "react-redux";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
@@ -6,18 +6,15 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 const MessageList = ({ scrollRef }) => {
   const [parent] = useAutoAnimate();
   const { chatRoms, currentChatId } = useSelector((state) => state.chat);
+  const { scrolling } = useSelector((state) => state.chat);
+
+  const chatList = useMemo(() => {
+    return chatRoms[currentChatId]?.chatList;
+  }, [chatRoms, currentChatId]);
 
   useEffect(() => {
-    if (!currentChatId) return;
-
-    const scrollToBottom = () => {
-      scrollRef.current.scrollIntoView({ behavior: "smooth" });
-    };
-
-    const scrollTimeout = setTimeout(scrollToBottom, 500);
-
-    return () => clearTimeout(scrollTimeout);
-  }, [currentChatId, scrollRef]);
+    scrollRef.current.scrollIntoView({ behavior: "smooth" });
+  }, [scrollRef, scrolling, chatList]);
 
   return (
     <div
@@ -25,7 +22,7 @@ const MessageList = ({ scrollRef }) => {
       className="bg-gray-200 px-4 h-[calc(100%-144px)] max-sm:h-[calc(100%-114px)] overflow-auto"
     >
       {currentChatId &&
-        chatRoms[currentChatId]?.chatList.map((message, index, arr) => (
+        chatList.map((message, index, arr) => (
           <Message
             key={message.time}
             arr={arr}
