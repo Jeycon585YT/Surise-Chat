@@ -1,16 +1,49 @@
-const ChatListItem = ({ user }) => {
+import { useSelector } from "react-redux";
+import { selectChatByChatId } from "../../redux/chat/chatSlice";
+import {
+  setCurrentChatIdToRedux,
+  setCurrentChatUserToRedux,
+} from "../../redux/chat/utils";
+import photo from "../../assets/images/defaultPhoto.jpg";
+
+const ChatListItem = ({ user, userChatId }) => {
+  const { currentChatId } = useSelector((state) => state.chat);
+  const chat = useSelector((state) => selectChatByChatId(state, userChatId));
+
+  const handleClick = () => {
+    setCurrentChatUserToRedux(user);
+    setCurrentChatIdToRedux(userChatId);
+  };
+
+  const isCurrentChat = currentChatId === userChatId;
+
   return (
-    <div className="flex p-2 items-center gap-2 text-white hover:bg-black/40 cursor-pointer">
+    <div
+      onClick={handleClick}
+      className={`flex p-2 sm:p-3 items-center gap-3 text-white hover:bg-black/40 cursor-pointer transition duration-300 ${
+        isCurrentChat ? "bg-black/40" : ""
+      }`}
+    >
       <img
-        className="w-12 h-12 rounded-full object-cover object-center"
-        src="https://sm.ign.com/ign_tr/cover/h/harry-pott/harry-potter-the-series_p1mc.jpg"
+        className="w-12 h-12 max-sm:h-6 max-sm:w-6 rounded-full object-cover object-center"
+        src={user?.photoURL || photo}
         alt=""
       />
-      <div>
-        <span className="font-bold text-lg ">
-          {user?.displayName || "Potter"}
-        </span>
-        <p className="text-slate-100">Hello</p>
+      <div className="max-sm:hidden flex justify-between items-center w-full">
+        <div>
+          <span className="font-bold text-lg hover:underline ">
+            {user?.displayName}
+          </span>
+          <p className="text-slate-300 text-xs line-clamp-1 break-all">
+            {chat?.chatList.slice(-1)[0]?.message}
+          </p>
+        </div>
+        <p className="text-xs text-slate-300 text-nowrap">
+          {new Date(chat?.chatList.slice(-1)[0]?.time).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </p>
       </div>
     </div>
   );
