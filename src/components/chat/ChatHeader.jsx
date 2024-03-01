@@ -1,5 +1,6 @@
 import { BsCameraVideoFill, BsThreeDots } from "react-icons/bs";
 import { FaUserPlus } from "react-icons/fa";
+import photo from "../../assets/images/defaultPhoto.jpg";
 
 export const ChatHeader = ({ photoURL, displayName }) => (
   <div className="h-20 max-sm:h-12 bg-amber-950 text-white flex justify-between items-center p-4 sm:p-2">
