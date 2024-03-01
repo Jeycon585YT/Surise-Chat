@@ -5,7 +5,6 @@ import LoadingSpin from "../components/shared/LoadingSpin";
 
 const ProtectedRoute = () => {
   const { user, isLoading } = useSelector((state) => state.auth);
-  console.log(isLoading);
   const navigate = useNavigate();
 
   useEffect(() => {
