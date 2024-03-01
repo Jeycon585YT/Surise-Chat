@@ -1,36 +1,57 @@
-const Message = () => {
-  const owner = false;
+import { useSelector } from "react-redux";
+import { selectUserById } from "../../redux/users/usersSlice";
+import photo from "../../assets/images/defaultPhoto.jpg";
+import moment from "moment";
+
+const Message = ({ message, arr, index }) => {
+  const { user } = useSelector((state) => state.auth);
+  const messageOwner = useSelector((state) =>
+    selectUserById(state, message?.ownerId)
+  );
+
+  const owner = user?.uid === message?.ownerId;
+  const isNear =
+    arr[index]?.ownerId.toString() === arr[index - 1]?.ownerId.toString();
+  const isNearEnd =
+    arr[index]?.ownerId.toString() === arr[index + 1]?.ownerId.toString();
 
   return (
-    <div className={`flex gap-5 mb-5 ${owner ? "flex-row-reverse" : ""}`}>
-      <div className="flex flex-shrink-0 flex-col text-slate-600 text-sm font-light">
+    <div
+      className={`flex gap-5 ${isNear ? "mt-0.5" : "mt-5"}   ${
+        owner ? "flex-row-reverse" : ""
+      }`}
+    >
+      {!owner && (
         <img
-          src="https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt5225004a8408fe43/61e79d82e98ca530e9450f36/20220119_Ronaldinho.jpg?auto=webp&format=pjpg&width=3840&quality=60"
+          src={messageOwner?.photoURL || photo}
           alt=""
-          className="h-12 w-12 rounded-full object-cover object-center"
+          className="h-6 w-6 rounded-full object-cover object-center"
         />
-        <span>just now</span>
-      </div>
+      )}
       <div
         className={`flex flex-col ${
           owner ? "items-end" : "items-start"
         } gap-2 `}
       >
         <p
-          className={`px-5 py-2 max-w-80 rounded-3xl ${
+          className={`relative px-5 py-1 max-w-80 rounded-3xl flex flex-row gap-1 ${
             owner
-              ? "rounded-br-none bg-sky-400 text-white"
-              : "rounded-bl-none bg-white"
-          }`}
+              ? "rounded-br-none bg-sky-400 text-white "
+              : "rounded-bl-none bg-white "
+          } ${isNearEnd ? "!rounded-3xl" : "mb-2"} break-all`}
         >
-          sdkfjsadlf jasfsjaldfjlsadfjsadlf jlaskdj s asfd asdf asf asdf asdf sd
-          asf asdf asdf asdf asdf asd
+          {message?.message}
+          <span
+            className={`text-nowrap text-xs text-slate-500 self-end ${
+              owner ? " !text-slate-300" : ""
+            }`}
+          >
+            {moment(message?.time).format("LT")}
+          </span>
         </p>
-        <img
-          src="https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt5225004a8408fe43/61e79d82e98ca530e9450f36/20220119_Ronaldinho.jpg?auto=webp&format=pjpg&width=3840&quality=60"
-          alt=""
-          className="w-1/3"
-        />
+        {message?.photoURL && (
+          <img src={message?.photoURL} alt="" className="w-1/3 " />
+        )}
       </div>
     </div>
   );
