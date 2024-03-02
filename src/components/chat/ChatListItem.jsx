@@ -25,7 +25,7 @@ const ChatListItem = ({ user, userChatId }) => {
       }`}
     >
       <img
-        className="w-12 h-12 max-sm:h-6 max-sm:w-6 rounded-full object-cover object-center"
+        className="w-12 h-12 max-sm:h-10 max-sm:w-10 rounded-full object-cover object-center"
         src={user?.photoURL || photo}
         alt=""
       />
