@@ -50,7 +50,11 @@ const Message = ({ message, arr, index }) => {
           </span>
         </p>
         {message?.photoURL && (
-          <img src={message?.photoURL} alt="" className="w-1/3 " />
+          <img
+            src={message?.photoURL}
+            alt=""
+            className="w-1/3 hover:w-full duration-500"
+          />
         )}
       </div>
     </div>
