@@ -22,6 +22,7 @@ import { setIsLoadingToRedux, setUserToRedux } from "../redux/auth/utils";
 import { setUsersToRedux } from "../redux/users/utils";
 import { store } from "../redux/store";
 import { setChatRoms } from "../redux/chat/chatSlice";
+import { resizeImage } from "../utils";
 
 export const registerUserToFirebase = async (email, password) => {
   try {
@@ -38,16 +39,55 @@ export const registerUserToFirebase = async (email, password) => {
   }
 };
 
+// export const updateProfileImageToFirebase = async (file) => {
+//   if (!file) return null;
+//   try {
+//     const storageRef = ref(storage, "images/" + Date.now().toString());
+//     const snapshot = await uploadBytes(storageRef, file);
+//     const photoURL = await getDownloadURL(snapshot.ref);
+//     return photoURL;
+//   } catch (error) {
+//     handleFirebaseError(error);
+//     return false;
+//   }
+// };
+
 export const updateProfileImageToFirebase = async (file) => {
   if (!file) return null;
+
   try {
+    const resizedFile = await resizeImage(file, 800, 800);
     const storageRef = ref(storage, "images/" + Date.now().toString());
-    const snapshot = await uploadBytes(storageRef, file);
-    const photoURL = await getDownloadURL(snapshot.ref);
-    return photoURL;
+
+    const reader = new FileReader();
+
+    reader.readAsArrayBuffer(resizedFile);
+
+    return new Promise((resolve, reject) => {
+      reader.onload = async () => {
+        try {
+          const arrayBuffer = reader.result;
+          const uint8Array = new Uint8Array(arrayBuffer);
+
+          const snapshot = await uploadBytes(storageRef, uint8Array);
+
+          const photoURL = await getDownloadURL(snapshot.ref);
+
+          resolve(photoURL);
+        } catch (error) {
+          handleFirebaseError(error);
+          reject(error);
+        }
+      };
+
+      reader.onerror = (error) => {
+        console.log(error);
+        reject(error);
+      };
+    });
   } catch (error) {
     handleFirebaseError(error);
-    return false;
+    return null;
   }
 };
 
