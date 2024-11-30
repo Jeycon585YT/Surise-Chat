@@ -1,18 +1,16 @@
 import { useState } from "react";
 import Button from "../shared/Button";
-import { IoIosAttach } from "react-icons/io";
-import { LuImagePlus } from "react-icons/lu";
 import { useSelector } from "react-redux";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../Firebase/config";
 import { updateProfileImageToFirebase } from "../../Firebase/actions";
-import { FaFileImage } from "react-icons/fa";
-import { AiOutlineLoading } from "react-icons/ai";
+import EmojiPicker from "emoji-picker-react";
 
 const ChatInput = ({ scrollRef }) => {
   const [isPending, setIsPending] = useState(false);
   const [input, setInput] = useState("");
   const [imgFile, setImageFile] = useState(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const { currentChatId } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.auth);
 
@@ -43,43 +41,52 @@ const ChatInput = ({ scrollRef }) => {
       console.error(error);
     }
   };
+
+  const handleEmojiClick = (emojiObject) => {
+    setInput((prevInput) => prevInput + emojiObject.emoji); // Agrega el emoji al input
+  };
+
   return (
-    <div className="bg-slate-50 h-16 px-3  flex items-center justify-center ">
+    <div className="bg-slate-50 h-16 px-3 flex items-center justify-center">
       <form className="flex-1 h-full relative" onSubmit={handleSubmit}>
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           type="text"
-          placeholder="Type something"
-          className="w-full h-full outline-none bg-slate-50"
+          placeholder="Escribe un mensaje..."
+          className="w-full h-full outline-none bg-slate-50 text-black"
         />
-        {imgFile && (
-          <FaFileImage
-            className="absolute -top-4 right-4 text-slate-400"
-            size={28}
-          />
-        )}
-        {isPending && (
-          <AiOutlineLoading className="absolute text-gray-800 right-2 top-5 animate-spin h-6 w-6" />
-        )}
       </form>
 
       <div className="flex items-center space-x-4">
-        <label htmlFor="file" className="cursor-pointer">
-          <LuImagePlus className="h-6 w-6 hover:text-slate-600" />
-        </label>
-        <input
-          type="file"
-          className="hidden"
-          id="file"
-          accept=".png,.jpg,.jpeg"
-          onChange={(e) => setImageFile(e.target.files[0])}
-        />
-        <IoIosAttach className="h-6 w-6 cursor-pointer hover:text-slate-600" />
-        <Button onClick={handleSubmit} className="bg-sky-400" text="Send" />
-      </div>
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setShowEmojiPicker((prev) => !prev)} // Alternar el selector
+            className="bg-gradient-to-r from-purple-900 via-pink-700 to-orange-600 text-white hover:from-purple-700 hover:to-orange-500 text-sm font-medium px-6 py-2 rounded-full shadow-lg transition duration-300 ease-in-out flex items-center justify-center"
+          >
+            <span style={{ fontSize: "1.1rem" }}>😊</span>
+          </button>
+          {showEmojiPicker && (
+          <div
+            className="absolute bottom-12 z-10"
+            style={{ left: "-230px" }} // Mueve el EmojiPicker a la izquierda
+          >
+            <EmojiPicker onEmojiClick={handleEmojiClick} />
+          </div>
+          )}
+        </div>
+
+  <Button
+    onClick={handleSubmit}
+    className="bg-gradient-to-r from-purple-900 via-pink-700 to-orange-600 text-white hover:from-purple-700 hover:to-orange-500 text-sm font-medium px-6 py-2 rounded-full shadow-lg transition duration-300 ease-in-out"
+    text="Enviar"
+  />
+</div>
     </div>
   );
 };
 
 export default ChatInput;
+
+

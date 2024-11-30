@@ -63,12 +63,20 @@ const ChatList = () => {
   }, [user?.uid]);
 
   return (
-    <div className="relative  overflow-auto h-[calc(100%-136px)]">
+    <div
+      className="relative mt-2 relative overflow-auto h-[calc(100%-145px)] bg-gradient-to-r from-purple-900 via-pink-800 to-orange-700 shadow-lg border-t-4 border-purple-700 rounded-lg"
+    >
       {chatUsersList.map(({ user, userChatId }, index) => (
-        <ChatListItem key={index} user={user} userChatId={userChatId} />
+        <ChatListItem
+          key={index}
+          user={user}
+          userChatId={userChatId}
+          className="hover:bg-purple-800 transition-colors duration-300"
+        />
       ))}
     </div>
   );
 };
 
 export default ChatList;
+

@@ -21,7 +21,7 @@ const Search = () => {
   });
 
   return (
-    <div className="relative">
+    <div className="relative mt-4"> {/* Agregado margen superior */}
       {/* Search Form */}
       <label htmlFor="search" className="relative block">
         <input
@@ -29,15 +29,20 @@ const Search = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           type="text"
-          className="px-10 py-4 max-sm:py-3 w-full bg-transparent border-none text-white outline-none placeholder:text-slate-100/40 max-sm:focus:w-screen max-sm:focus:bg-amber-900 duration-1000 rounded-t-lg max-sm:focus:ring-2 max-sm:focus:ring-amber-900 max-sm:focus:border-amber-900"
-          placeholder="Find a user"
+          className="px-12 py-4 w-full bg-gradient-to-r from-purple-800 via-pink-700 to-orange-600 text-white placeholder:text-pink-300 outline-none rounded-t-lg shadow-lg focus:ring-4 focus:ring-pink-500 transition-all duration-300"
+          placeholder="Buscar un usuario..."
         />
-        <FaSearch className="absolute top-4 left-2 text-slate-100/40 text-2xl transition-transform transform-gpu hover:scale-105" />
+        <FaSearch className="absolute top-4 left-3 text-pink-300 text-2xl hover:text-pink-100 transition-transform transform hover:scale-110" />
       </label>
       {/* Search Results */}
-      <div className="absolute max-sm:w-96 z-10 bg-amber-900 w-full border-b max-sm:border-none border-slate-400  shadow-md">
+      <div className="absolute z-10 bg-gradient-to-r from-purple-900 via-pink-800 to-orange-700 w-full border-t border-pink-500 rounded-b-lg shadow-xl">
         {filteredUsers.map((user) => (
-          <SearchUserItem key={user.uid} user={user} setSearch={setSearch} />
+          <SearchUserItem
+            key={user.uid}
+            user={user}
+            setSearch={setSearch}
+            className="hover:bg-pink-700 transition-colors duration-200"
+          />
         ))}
       </div>
     </div>
@@ -45,3 +50,5 @@ const Search = () => {
 };
 
 export default Search;
+
+

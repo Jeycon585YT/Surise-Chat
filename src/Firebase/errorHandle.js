@@ -8,16 +8,16 @@ export const handleFirebaseError = (error) => {
   switch (errorCode) {
     case "auth/email-already-in-use":
       customMessage =
-        "The email address is already in use. Please use a different email address or try logging in.";
+        "La dirección de correo electrónico ya está en uso. Utilice una dirección de correo electrónico diferente o intente iniciar sesión.";
       break;
 
     case "auth/weak-password":
-      customMessage = "Password should be at least 6 characters";
+      customMessage = "La contraseña debe tener al menos 6 caracteres.";
       break;
 
     case "auth/invalid-credential":
       customMessage =
-        "Invalid credentials. Please check your login information and try again.";
+        "Credenciales no válidas. Por favor verifique su información de inicio de sesión e inténtelo nuevamente.";
       break;
 
     default:

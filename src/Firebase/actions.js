@@ -39,19 +39,6 @@ export const registerUserToFirebase = async (email, password) => {
   }
 };
 
-// export const updateProfileImageToFirebase = async (file) => {
-//   if (!file) return null;
-//   try {
-//     const storageRef = ref(storage, "images/" + Date.now().toString());
-//     const snapshot = await uploadBytes(storageRef, file);
-//     const photoURL = await getDownloadURL(snapshot.ref);
-//     return photoURL;
-//   } catch (error) {
-//     handleFirebaseError(error);
-//     return false;
-//   }
-// };
-
 export const updateProfileImageToFirebase = async (file) => {
   if (!file) return null;
 

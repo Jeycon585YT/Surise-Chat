@@ -1,11 +1,10 @@
-const Input = ({ className, ...props }) => {
+const Input = ({ placeholder, type }) => {
   return (
-    <>
-      <input
-        className={`${className} p-4 border-b border-neutral-300 w-96 outline-none ring-inset focus:ring-2 focus:ring-sky-400 rounded`}
-        {...props}
-      />
-    </>
+    <input
+      type={type}
+      placeholder={placeholder}
+      className="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 text-sm placeholder:text-gray-400"
+    />
   );
 };
 

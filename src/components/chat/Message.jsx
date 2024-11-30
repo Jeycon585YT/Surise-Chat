@@ -17,7 +17,7 @@ const Message = ({ message, arr, index }) => {
 
   return (
     <div
-      className={`flex gap-5 ${isNear ? "mt-0.5" : "mt-5"}   ${
+      className={`flex gap-5 ${isNear ? "mt-0.5" : "mt-5"} ${
         owner ? "flex-row-reverse" : ""
       }`}
     >
@@ -29,15 +29,13 @@ const Message = ({ message, arr, index }) => {
         />
       )}
       <div
-        className={`flex flex-col ${
-          owner ? "items-end" : "items-start"
-        } gap-2 `}
+        className={`flex flex-col ${owner ? "items-end" : "items-start"} gap-2`}
       >
         <p
           className={`relative px-5 py-1 max-w-80 rounded-3xl flex flex-row gap-1 ${
             owner
-              ? "rounded-br-none bg-sky-400 text-white "
-              : "rounded-bl-none bg-white "
+              ? "rounded-br-none bg-gradient-to-r from-purple-900 via-pink-700 to-orange-600 text-white"
+              : "rounded-bl-none bg-white text-black"
           } ${isNearEnd ? "!rounded-3xl" : "mb-2"} break-all`}
         >
           {message?.message}
@@ -62,3 +60,5 @@ const Message = ({ message, arr, index }) => {
 };
 
 export default Message;
+
+

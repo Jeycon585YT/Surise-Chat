@@ -13,18 +13,24 @@ const Navbar = () => {
   };
 
   return (
-    <div className=" max-sm:hidden flex items-center bg-black/40 rounded-r-none h-20 p-2 justify-between text-slate-50">
-      <span className="font-black text-xl flex items-center">Logo</span>
-      <div className="flex items-center gap-2">
+    <div className="max-sm:hidden flex items-center bg-gradient-to-r from-purple-900 via-pink-700 to-orange-600 h-20 px-4 justify-between text-white shadow-lg rounded-b-md">
+      
         <img
-          className="bg-slate-50 h-8 w-8 rounded-full object-cover border-2 border-blue-500"
+          src={'/public/logoPD.png'}
+          alt="Logo"
+          className="h-16 w-17 object-contain mr-2" // Ajusta el tamaño de tu logo
+        />
+      
+      <div className="flex items-center gap-4">
+        <img
+          className="bg-gradient-to-r from-pink-500 to-yellow-500 h-10 w-10 rounded-full object-cover border-2 border-pink-400 shadow-md"
           src={user?.photoURL || photo}
           alt="profile image"
         />
-        <span>{user?.displayName}</span>
+        <span className="text-pink-200 font-semibold">{user?.displayName}</span>
         <Button
-          className="bg-amber-950 text-sm font-medium max-sm:absolute max-sm:top-0 max-sm:left-0 border border-amber-950 px-3 py-1 rounded "
-          text="Logout"
+          className="bg-gradient-to-r from-red-500 via-orange-600 to-yellow-500 hover:from-red-700 hover:to-yellow-600 text-white text-sm font-medium px-4 py-2 rounded-full shadow-lg transition duration-300 ease-in-out"
+          text="Cerrar sesión"
           onClick={handleLogoutClick}
         />
       </div>
@@ -33,3 +39,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

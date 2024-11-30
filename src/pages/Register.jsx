@@ -1,15 +1,13 @@
-import { LuImagePlus } from "react-icons/lu";
-import Input from "../components/shared/Input";
-import Button from "../components/shared/Button";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   registerUserToFirebase,
   setUserToFirebase,
-  updateProfileImageToFirebase,
   updateUserProfileToFirebase,
 } from "../Firebase/actions";
 import { handleFirebaseError } from "../Firebase/errorHandle";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import Input from "../components/shared/Input";
+import Button from "../components/shared/Button";
 import LoadingSpin from "../components/shared/LoadingSpin";
 
 const Register = () => {
@@ -23,65 +21,62 @@ const Register = () => {
     const displayName = e.target[0].value;
     const email = e.target[1].value;
     const password = e.target[2].value;
-    const file = e.target[3].files[0];
 
     try {
       const user = await registerUserToFirebase(email, password);
 
       if (!user) return;
 
-      const photoURL = await updateProfileImageToFirebase(file, user.uid);
-      await updateUserProfileToFirebase({
-        displayName,
-        photoURL,
-      });
+      await updateUserProfileToFirebase({ displayName });
       await setUserToFirebase(user.uid, {
         uid: user.uid,
         displayName,
         email,
-        photoURL,
       });
 
       navigate("/");
       setIsPending(false);
     } catch (error) {
       handleFirebaseError(error);
+      setIsPending(false);
     }
   };
 
   return (
-    <div className="relative bg-gradient-to-br from-blue-400 to-sky-300 min-h-screen flex items-center justify-center">
+    <div
+      className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-purple-900 via-indigo-500 to-pink-500 relative"
+      style={{
+        backgroundImage: "url('/public/backgroundR.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       {isPending && <LoadingSpin className="absolute" />}
-      <div className="bg-white py-8 px-12 rounded-lg flex flex-col gap-6 items-center shadow-lg">
-        <h1 className="text-neutral-800 font-bold text-4xl">Logo</h1>
-        <h4 className="text-neutral-700 text-lg">Register</h4>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
-          <Input placeholder="Enter your display name" type="text" />
-          <Input placeholder="Email" type="email" />
-          <Input placeholder="Password" type="password" />
-
-          <input id="file" className="hidden" type="file" />
-          <label
-            htmlFor="file"
-            className="flex items-center space-x-4 cursor-pointer p-4 text-sky-600/60 hover:brightness-150 duration-150"
-          >
-            <LuImagePlus size={48} />
-            <span>Update Profile Image</span>
-          </label>
+      <div className="bg-white/10 backdrop-blur-lg p-8 rounded-lg shadow-lg flex flex-col gap-4 items-center w-96">
+        <img
+          src="/public/logoPD.png"
+          alt="Logo Sunrise Chat"
+          style={{ width: "195px", height: "195px" }}
+        />
+        <h1 className="text-white font-bold text-3xl mb-2">Registrate</h1>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full">
+          <Input placeholder="Nombre Completo" type="text" />
+          <Input placeholder="Correo Electrónico" type="email" />
+          <Input placeholder="Contraseña" type="password" />
 
           <Button
-            className="bg-sky-600/80 disabled:bg-slate-300"
-            text="Sign Up"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-md"
+            text="Registrarse"
             disabled={isPending}
           />
         </form>
-        <p className="mt-4 text-neutral-700">
-          Already have an account?{" "}
+        <p className="mt-4 text-white text-sm">
+          ¿Ya tienes una cuenta?{" "}
           <Link
             to="/login"
-            className="text-sky-500 hover:text-sky-800 duration-150"
+            className="text-pink-600 hover:text-pink-800 duration-150"
           >
-            Login
+            Iniciar sesión
           </Link>
         </p>
       </div>
@@ -90,3 +85,4 @@ const Register = () => {
 };
 
 export default Register;
+
